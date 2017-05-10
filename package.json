@@ -1,0 +1,37 @@
+{
+  "name": "analizador-usando-peg-erik-jorge-ruben",
+  "version": "1.0.0",
+  "description": "## Alumnos",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha ./test.js",
+    "coverage": "multi='dot=- html-cov=coverage.html' ./node_modules/mocha/bin/mocha -r blanket --reporter mocha-multi --no-colors"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "///[\\w-]+\\.js$/",
+      "data-cover-never": [
+        "node_modules",
+        "public"
+      ],
+      "data-cover-reporter-options": {
+        "shortnames": true
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ULL-ESIT-PL-1617/analizador-usando-peg-erik-jorge-ruben.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ULL-ESIT-PL-1617/analizador-usando-peg-erik-jorge-ruben/issues"
+  },
+  "homepage": "https://github.com/ULL-ESIT-PL-1617/analizador-usando-peg-erik-jorge-ruben#readme",
+  "devDependencies": {
+    "blanket": "^1.2.3",
+    "mocha": "^3.3.0",
+    "mocha-multi": "^0.11.0"
+  }
+}

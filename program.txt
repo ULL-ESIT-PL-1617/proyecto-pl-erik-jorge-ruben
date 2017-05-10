@@ -1,0 +1,13 @@
+con else
+
+node main "var x, squ; function foo (a, b, c) {var a,b,c; a := 2}; begin x := 1;  while x <= 10 do begin call square; ! squ; x := x + 1 end ;  if x <= 10 then begin call square; ! squ; x := x + 1 end else begin a := 0 end end"
+
+sin else
+node main "var x, squ; function foo (a, b, c) {var a,b,c; a := 2}; begin x := 1;  while x <= 10 do begin call square; ! squ; x := x + 1 end ;  if x <= 10 then begin call square; ! squ; x := x + 1 end end"
+
+con llamadas a función con parámetros
+node main "var x, squ; function foo (a, b, c) {var a,b,c; a := 2}; begin x := 1;  while x <= 10 do begin call square; ! squ; x := (x + 1) * 2 end ;  if x <= 10 then begin call square; ! squ; x := - x + 1 end else begin x := a (b, 2+2, z) end end"
+
+
+
+function funcId (a, b, c){  const d = 1, e = 2;  var f, g, h;  begin    f := a + d;    g := b + e  end }
