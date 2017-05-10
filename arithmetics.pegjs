@@ -1,55 +1,60 @@
 {
-var tree = function(f, r) {
-    if (r.length > 0) {
-      var last = r.pop();
-      var result = {
-        type:  last[0],
-        left: tree(f, r),
-        right: last[1]
-      };
-    }
-    else {
-      var result = f;
-    }
-    return result;
-  }
+
+var util = require("util");
+var prebSymbolTable = null;
+
+  var { Node, BinOp, Comma, Leaf } = require('./node.js');
+
+  var buildTree = function(left,rest) {
+     if (rest.length == 0) return left;
+     return rest.reduce(
+        (tree, [ operator, operand]) => {
+          tree = new BinOp({type:operator, left: tree, right: operand});
+          return tree;
+        },
+        left
+     );
+  };
+
+
+
+
+
 }
 start
-  = b:block {return b;}
+  = b:block {return new FunctionDec({
+    params: {},
+    code: b
+  });}
 
 block
   = constant:(CONST ID CONSTASSIGN NUMBER (COMMA ID CONSTASSIGN NUMBER)* COLON)?
     vars:(VAR ID (COMMA ID)* COLON)?
-    proc:(PROCEDURE ID COLON block COLON)*
     funct: (FUNCTION ID LEFTPAR (ID (COMMA ID)*)? RIGHTPAR LEFTBRACKET block RIGHTBRACKET COLON)*
     est:statement
-        { var bloque = {};
-          var constantes = {};
+        {
+          var bloque = {};
+          var symbolTable = {};
+          symbolTable ["prebSymbolTable"] = prebSymbolTable;
           if (constant){
-            constantes [constant[1]] = constant [3];
+            symbolTable [constant[1]] = {type: "const", value: constant [3]};
             if (constant[4]){
               constant[4].forEach( function (element){
-                constantes [element[1]] = element [3];
+                symbolTable [element[1]] = {type: "const", value: element [3]};
               });
             }
           }
 
-          var variables = {};
           if (vars){
-            variables [vars[1]] = null;
+            symbolTable [vars[1]] = {type: "var", value: null};
             if (vars[2]){
               vars[2].forEach( function (element){
-                variables [element [1]] = null;
+                symbolTable [element [1]] = {type: "var", value: null};
               } );
             }
           }
-          var procedimientos = {};
-          proc.forEach ( function (element){
-            procedimientos [element[1]] = element[3];
-          });
-          var funciones = {};
+
           funct.forEach ( function (element){
-            funciones [element[1]] = element[6];
             var parametros = {};
             if (element [3]){
               parametros [element [3] [0]] = null;
@@ -57,19 +62,18 @@ block
                 parametros [x[1]] = null;
               });
             }
-            funciones [[element[1]]] ["Parametros"] = parametros;
+            symbolTable [element[1]] = {type: "function", function:new FunctionDec({
+              params: parametros,
+              code: element[6]
+            });};
           });
-          bloque ["constantes"] = constantes;
-          bloque ["variables"] = variables;
-          bloque ["procedimientos"] = procedimientos;
-          bloque ["funciones"] = funciones;
+          bloque ["symbolTable"] = symbolTable;
           bloque ["sentencias"] = est;
           return bloque;
         }
 
 statement
   = id:ID assign:ASSIGN value:expression {return {type: assign, left: id, right: value }}
-  / call:CALL id:ID {return {type: call, procedimiento: id }}
   / q:Q id:ID {return {type : q, id:id}}
   / x:X exp:expression {return {type : x, expresion:exp}}
   / BEGIN first:statement next:(COLON statement)* END { var stats = {}
@@ -129,8 +133,8 @@ MULT = _"*"_ {return "*";}
 DIV = _"/"_ {return "/";}
 LEFTPAR = _"("_
 RIGHTPAR = _")"_
-NUMBER = _ digits:$[0-9]+ _ { return parseInt(digits, 10); }
-ID = _ id:$([a-z_]i$([a-z0-9_]i*)) _ {return id; }
+NUMBER = _ digits:$[0-9]+ _ { return new Leaf({type:'NUM', value: digits});}
+ID = _ id:$([a-z_]i$([a-z0-9_]i*)) _ { return new Leaf({type:'ID',  value: id});}
 CONSTASSIGN = _'=' _
 ASSIGN = _ ':=' _{return ":=";}
 COMMA = _","_
@@ -140,8 +144,6 @@ LEFTBRACKET = _"{"_
 RIGHTBRACKET = _"}"_
 CONST = _"const"_
 VAR = _"var"_
-PROCEDURE = _"procedure"_
-CALL = _"call"_ {return "call";}
 BEGIN = _"begin"_
 END = _"end"_
 IF = _"if"_
