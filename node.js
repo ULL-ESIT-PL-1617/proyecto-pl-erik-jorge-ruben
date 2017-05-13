@@ -8,39 +8,59 @@ class Node {
 
 class FunctionDec extends Node{
   translate() {
-    console.log("Soy una declaración de función");
-    return this.code.translate()
+    var params = "";
+    var counter = 1;
+    for ( var par in this.params){
+      if (counter == 1){
+        params += par;
+      } else {
+        params += "," + par;
+      }
+      counter++;
+    }
+    return "function " + this.name + "("+ params +")" + "{ \n" + this.code.translate() + " }";
   }
 
 };
 
 class FunctionCall extends Node{
   translate() {
-    console.log("No hago nada de momento");
-  }
+    return this.id + "()";
+   }
 };
 
 class CodeBloc extends Node {
   translate(){
-    console.log("soy un bloque de codigo");
+    var retVar = "";
+    for (var key in this.symbolTable){
+      if (this.symbolTable[key]){
+        retVar += this.symbolTable[key].translate();
+      }
+    }
+    retVar += this.code.translate();
+    return retVar;
   }
 };
 
 class StatementBloc extends Node {
   translate(){
-    console.log("soy un bloque de statement");
+    var retVar = "";
+    for (var key in this){
+      console.log(this[key]);
+    }
+    return retVar;
   }
 };
 
 class IfStatement extends Node {
   translate(){
-    console.log("No hago nada de momento");
+    return "No hago nada de momento";
   }
 };
 
 class WhileStatement extends Node {
   translate(){
-    console.log("No hago nada de momento");
+    return "No hago nada de momento";
   }
 }
 
@@ -50,6 +70,12 @@ class BinOp extends Node{
     return this.left.translate() + this.type + this.right.translate();
   }
 };
+
+class ComparissonOp extends Node {
+  translate() {
+    console.log("soy una comparissonOp");
+  }
+}
 
 class Comma extends Node{
   translate() {
@@ -86,5 +112,6 @@ module.exports = {
   IfStatement: IfStatement,
   WhileStatement: WhileStatement,
   ParExp: ParExp,
-  StatementBloc: StatementBloc
+  StatementBloc: StatementBloc,
+  ComparissonOp: ComparissonOp
 };

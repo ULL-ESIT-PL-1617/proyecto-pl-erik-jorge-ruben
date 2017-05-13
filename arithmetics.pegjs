@@ -2,7 +2,7 @@
 
 var prebSymbolTable = null;
 
-  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc } = require('./node.js');
+  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp } = require('./node.js');
   let prevSymbolTable = null;
   var buildTree = function(left,rest) {
      if (rest.length == 0) return left;
@@ -55,10 +55,11 @@ block
                 parametros [x[1].value]= null;
               });
             }
-            symbolTable [element[1].value] = {type: "function", value:new FunctionDec({
+            symbolTable [element[1].value] = new FunctionDec({
+              name: element[1].value,
               params: parametros,
               code: element[6]
-            })};
+            });
           });
           prevSymbolTable = symbolTable.father;
           bloque.symbolTable = symbolTable;
@@ -78,7 +79,7 @@ statement
                                                         next.forEach((x)=>{stats [""+counter] = x[1];
                                                           counter++;
                                                         });
-                                                        return new StatementBloc ({code: stats})
+                                                        return new StatementBloc (stats)
                                                       }
 
   / IF cond:condition THEN th:statement els:(ELSE statement)? { if (els){
@@ -90,8 +91,8 @@ statement
   / WHILE cond:condition DO d:statement { return new WhileStatement({condition: cond, do: d});}
 
   condition
-    = odd:ODD right:expression { return {type: odd, right: right }}
-    / left:expression cond:COMPARISON right:expression {return {type: cond, left: left, right: right}}
+    = odd:ODD right:expression { return new ComparissonOp( {type: odd, right: right, left: null })}
+    / left:expression cond:COMPARISON right:expression {return new ComparissonOp({type: cond, left: left, right: right})}
 
   expression
       = signo:(ADDOP)? left:term right:(ADDOP term)* {  if (signo == "-"){
