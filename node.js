@@ -8,7 +8,8 @@ class Node {
 
 class FunctionDec extends Node{
   translate() {
-    console.log("No hago nada de momento");
+    console.log("Soy una declaración de función");
+    return this.code.translate()
   }
 
 };
@@ -18,6 +19,30 @@ class FunctionCall extends Node{
     console.log("No hago nada de momento");
   }
 };
+
+class CodeBloc extends Node {
+  translate(){
+    console.log("soy un bloque de codigo");
+  }
+};
+
+class StatementBloc extends Node {
+  translate(){
+    console.log("soy un bloque de statement");
+  }
+};
+
+class IfStatement extends Node {
+  translate(){
+    console.log("No hago nada de momento");
+  }
+};
+
+class WhileStatement extends Node {
+  translate(){
+    console.log("No hago nada de momento");
+  }
+}
 
 class BinOp extends Node{
   translate() {
@@ -44,9 +69,22 @@ Array.prototype.translate = function(j) {
   return this.map((t) => t.translate()).join(j || '');
 };
 
+class ParExp extends Node{
+  translate(){
+    console.log("No hago nada de momento");
+  }
+}
+
 module.exports = {
   Node: Node,
   BinOp: BinOp,
   Comma: Comma,
-  Leaf: Leaf
+  Leaf: Leaf,
+  FunctionDec: FunctionDec,
+  FunctionCall: FunctionCall,
+  CodeBloc: CodeBloc,
+  IfStatement: IfStatement,
+  WhileStatement: WhileStatement,
+  ParExp: ParExp,
+  StatementBloc: StatementBloc
 };
