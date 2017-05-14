@@ -85,7 +85,7 @@ class IfStatement extends Node {
 class WhileStatement extends Node {
   translate(){
     return "while (" + this.condition.translate() + "){" +
-      this.do.translate(); + "}";
+      this.do.translate() + "}";
   }
 }
 
@@ -126,7 +126,7 @@ Array.prototype.translate = function(j) {
 
 class ParExp extends Node{
   translate(){
-    console.log("No hago nada de momento");
+    return "(" + this.exp.translate() + ")";
   }
 }
 

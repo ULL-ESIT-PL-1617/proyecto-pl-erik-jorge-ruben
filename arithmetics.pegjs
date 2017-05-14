@@ -71,6 +71,17 @@ block
 
 statement
   = id:ID assign:ASSIGN value:expression {return new BinOp ({type: "=", left: id, right: value});}
+  / id:ID LEFTPAR params:(expression (COMMA expression)*)? RIGHTPAR { var parametros = {};
+                                                                      if (params){
+                                                                        parametros [0] = params [0];
+                                                                        var counter = 1;
+                                                                        params [1].forEach((x)=>{
+                                                                          parametros [counter] = x [1]
+                                                                          counter++;
+                                                                        });
+                                                                      }
+                                                                        return new FunctionCall({id:id, parametros: parametros})
+                                                                      }
   / q:Q id:ID {return {type : q, id:id}}
   / x:X exp:expression {return {type : x, expresion:exp}}
   / BEGIN first:statement next:(COLON statement)* END { var stats = {}
