@@ -6,6 +6,18 @@ class Node {
   }
 };
 
+class VarDec extends Node {
+  translate() {
+    return "var " + this.name + ";"
+  }
+}
+
+class ConstDec extends Node {
+  translate(){
+    return "const " + this.name + " = " + this.value.value + ";"
+  }
+}
+
 class FunctionDec extends Node{
   translate() {
     var params = "";
@@ -25,7 +37,18 @@ class FunctionDec extends Node{
 
 class FunctionCall extends Node{
   translate() {
-    return this.id + "()";
+    var parametros = "";
+    var counter = 1;
+    for (var key in this.parametros){
+      if (counter == 1){
+        parametros += this.parametros[key].translate();
+      } else {
+        parametros += ", " + this.parametros[key].translate();
+      }
+      counter++;
+
+    }
+    return this.id.value + "("+ parametros +")";
    }
 };
 
@@ -46,7 +69,7 @@ class StatementBloc extends Node {
   translate(){
     var retVar = "";
     for (var key in this){
-      console.log(this[key]);
+      retVar += this[key].translate()
     }
     return retVar;
   }
@@ -54,13 +77,15 @@ class StatementBloc extends Node {
 
 class IfStatement extends Node {
   translate(){
-    return "No hago nada de momento";
+    return "if ("+ this.condition.translate() + "){" +
+      this.then.translate() + "} else {" + this.else.translate() + "}";
   }
 };
 
 class WhileStatement extends Node {
   translate(){
-    return "No hago nada de momento";
+    return "while (" + this.condition.translate() + "){" +
+      this.do.translate(); + "}";
   }
 }
 
@@ -73,7 +98,7 @@ class BinOp extends Node{
 
 class ComparissonOp extends Node {
   translate() {
-    console.log("soy una comparissonOp");
+    return this.left.translate() + this.type + this.right.translate();
   }
 }
 
@@ -86,8 +111,12 @@ class Comma extends Node{
 class Leaf extends Node{
   translate() {
     //console.log("visiting: "+util.inspect(this, {depth:null}))
-    var trans = (this.type == 'ID')? `sym.${this.value}`: this.value;
-    return trans;
+    //var trans = (this.type == 'ID')? `sym.${this.value}`: this.value;
+    //var trans = (this.type == 'ID')? `${this.value}`: this.value;
+
+
+    //return trans;
+    return this.value;
   }
 };
 
@@ -113,5 +142,7 @@ module.exports = {
   WhileStatement: WhileStatement,
   ParExp: ParExp,
   StatementBloc: StatementBloc,
-  ComparissonOp: ComparissonOp
+  ComparissonOp: ComparissonOp,
+  VarDec: VarDec,
+  ConstDec: ConstDec
 };

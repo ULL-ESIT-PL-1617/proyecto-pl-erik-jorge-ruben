@@ -2,7 +2,7 @@
 
 var prebSymbolTable = null;
 
-  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp } = require('./node.js');
+  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec} = require('./node.js');
   let prevSymbolTable = null;
   var buildTree = function(left,rest) {
      if (rest.length == 0) return left;
@@ -28,25 +28,25 @@ block
         {
           var bloque = new CodeBloc();
           let symbolTable = {};
-          symbolTable.father = prevSymbolTable;
+          //symbolTable.father = prevSymbolTable;
           if (constant){
-            symbolTable [constant[1].value] = {type: "const", value: constant [3]};
+            symbolTable [constant[1].value] = new ConstDec({name: constant[1].value, value: constant [3]});
             if (constant[4]){
               constant[4].forEach( function (element){
-                symbolTable [element[1].value] = {type: "const", value: element [3]};
+                symbolTable [element[1].value] = new ConstDec({name: element[1].value, value: element [3]});
               });
             }
           }
 
           if (vars){
-            symbolTable [vars[1].value] = {type: "var", value: null};
+            symbolTable [vars[1].value] = new VarDec({name: vars[1].value, value: null});
             if (vars[2]){
               vars[2].forEach( function (element){
-                symbolTable [element [1].value] = {type: "var", value: null};
+                symbolTable [element [1].value] = new VarDec({name: element [1].value, value: null});
               } );
             }
           }
-          prevSymbolTable = symbolTable;
+          //prevSymbolTable = symbolTable;
           funct.forEach ( function (element){
             var parametros = {};
             if (element [3]){
@@ -61,7 +61,7 @@ block
               code: element[6]
             });
           });
-          prevSymbolTable = symbolTable.father;
+          //prevSymbolTable = symbolTable.father;
           bloque.symbolTable = symbolTable;
 
           bloque.code = est;
@@ -70,7 +70,7 @@ block
         }
 
 statement
-  = id:ID assign:ASSIGN value:expression {return new BinOp ({type: assign, left: id, right: value});}
+  = id:ID assign:ASSIGN value:expression {return new BinOp ({type: "=", left: id, right: value});}
   / q:Q id:ID {return {type : q, id:id}}
   / x:X exp:expression {return {type : x, expresion:exp}}
   / BEGIN first:statement next:(COLON statement)* END { var stats = {}
