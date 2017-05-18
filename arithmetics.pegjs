@@ -25,9 +25,9 @@ block
     vars:(VAR ID (COMMA ID)* COLON)?
     funct: (FUNCTION ID LEFTPAR (ID (COMMA ID)*)? RIGHTPAR LEFTBRACKET block RIGHTBRACKET COLON)*
     est:statement
-        {
-          var bloque = new CodeBloc();
-          let symbolTable = {};
+        { 
+          var bloque = new CodeBloc();      // Bloque donde guardamos la tabla de símbolos
+          let symbolTable = {};             // Tabla de símbolo del bloque actual 
           //symbolTable.father = prevSymbolTable;
           if (constant){
             symbolTable [constant[1].value] = new ConstDec({name: constant[1].value, value: constant [3]});

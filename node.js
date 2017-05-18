@@ -1,23 +1,35 @@
 const util = require("util");
 
+/**
+ *  Clase que construye un nodo.
+ */
 class Node {
   constructor(node) {
     Object.assign(this,node);
   }
 };
 
+/**
+ * Clase que traduce las declaraciones de variables de PL0 a JavaScript.
+ */
 class VarDec extends Node {
   translate() {
     return "var " + this.name + ";"
   }
 }
 
+/**
+ * Clase que traduce las declaraciones de constantes de PL0 a JavaScript.
+ */ 
 class ConstDec extends Node {
   translate(){
     return "const " + this.name + " = " + this.value.value + ";"
   }
 }
 
+/**
+ * Clase que traduce una función PL0 a JavaScript.
+ */
 class FunctionDec extends Node{
   translate() {
     var params = "";
@@ -35,6 +47,9 @@ class FunctionDec extends Node{
 
 };
 
+/**
+ * Clase que traduce una llamada a una función en PL0 a JavaScript.
+ */
 class FunctionCall extends Node{
   translate() {
     var parametros = "";
@@ -52,6 +67,9 @@ class FunctionCall extends Node{
    }
 };
 
+/**
+ * Clase que traduce un bloque de código en PL0 a un bloque de código en JavaScript.
+ */
 class CodeBloc extends Node {
   translate(){
     var retVar = "";
@@ -65,6 +83,9 @@ class CodeBloc extends Node {
   }
 };
 
+/**
+ * 
+ */
 class StatementBloc extends Node {
   translate(){
     var retVar = "";
