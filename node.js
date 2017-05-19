@@ -20,7 +20,7 @@ class VarDec extends Node {
 
 /**
  * Clase que traduce las declaraciones de constantes de PL0 a JavaScript.
- */ 
+ */
 class ConstDec extends Node {
   translate(){
     return "const " + this.name + " = " + this.value.value + ";"
@@ -84,7 +84,7 @@ class CodeBloc extends Node {
 };
 
 /**
- * 
+ *
  */
 class StatementBloc extends Node {
   translate(){
@@ -107,6 +107,12 @@ class WhileStatement extends Node {
   translate(){
     return "while (" + this.condition.translate() + "){" +
       this.do.translate() + "}";
+  }
+}
+
+class ReturnStatement extends Node {
+  translate(){
+    return "return " + this.value.translate() + ";"
   }
 }
 
@@ -165,5 +171,6 @@ module.exports = {
   StatementBloc: StatementBloc,
   ComparissonOp: ComparissonOp,
   VarDec: VarDec,
-  ConstDec: ConstDec
+  ConstDec: ConstDec,
+  ReturnStatement: ReturnStatement
 };

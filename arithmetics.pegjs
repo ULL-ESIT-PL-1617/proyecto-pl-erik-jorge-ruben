@@ -2,7 +2,7 @@
 
 var prebSymbolTable = null;
 
-  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec} = require('./node.js');
+  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec, ReturnStatement} = require('./node.js');
   let prevSymbolTable = null;
   var buildTree = function(left,rest) {
      if (rest.length == 0) return left;
@@ -25,10 +25,10 @@ block
     vars:(VAR ID (COMMA ID)* COLON)?
     funct: (FUNCTION ID LEFTPAR (ID (COMMA ID)*)? RIGHTPAR LEFTBRACKET block RIGHTBRACKET COLON)*
     est:statement
-        { 
+        {
           var bloque = new CodeBloc();      // Bloque donde guardamos la tabla de símbolos
-          let symbolTable = {};             // Tabla de símbolo del bloque actual 
-          //symbolTable.father = prevSymbolTable;
+          let symbolTable = {};             // Tabla de símbolo del bloque actual
+          symbolTable.father = prevSymbolTable;
           if (constant){
             symbolTable [constant[1].value] = new ConstDec({name: constant[1].value, value: constant [3]});
             if (constant[4]){
@@ -46,7 +46,7 @@ block
               } );
             }
           }
-          //prevSymbolTable = symbolTable;
+          prevSymbolTable = symbolTable;
           funct.forEach ( function (element){
             var parametros = {};
             if (element [3]){
@@ -58,10 +58,10 @@ block
             symbolTable [element[1].value] = new FunctionDec({
               name: element[1].value,
               params: parametros,
-              code: element[6]
+              code: element[6] // hacer aqui un new CodeBloc();
             });
           });
-          //prevSymbolTable = symbolTable.father;
+          prevSymbolTable = symbolTable.father;
           bloque.symbolTable = symbolTable;
 
           bloque.code = est;
@@ -100,6 +100,7 @@ statement
                                                               then: th,
                                                               else: els });}
   / WHILE cond:condition DO d:statement { return new WhileStatement({condition: cond, do: d});}
+  / RET exp:expression {return new ReturnStatement({value: exp})}
 
   condition
     = odd:ODD right:expression { return new ComparissonOp( {type: odd, right: right, left: null })}
@@ -146,6 +147,7 @@ CONSTASSIGN = _'=' _
 ASSIGN = _ ':=' _{return ":=";}
 COMMA = _","_
 
+RET = _"return"_
 FUNCTION = _"function"_
 LEFTBRACKET = _"{"_
 RIGHTBRACKET = _"}"_
