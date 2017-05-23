@@ -1,9 +1,13 @@
 {
-
-var prebSymbolTable = null;
-
   var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec, ReturnStatement} = require('./node.js');
   let prevSymbolTable = null;
+  var setPrev = function (symbol) {
+    prevSymbolTable = symbol;
+  }
+  var getPrev = function () {
+    return prevSymbolTable;
+  }
+
   var buildTree = function(left,rest) {
      if (rest.length == 0) return left;
      return rest.reduce(
@@ -26,9 +30,9 @@ block
     funct: (FUNCTION ID LEFTPAR (ID (COMMA ID)*)? RIGHTPAR LEFTBRACKET block RIGHTBRACKET COLON)*
     est:statement
         {
-          var bloque = new CodeBloc();      // Bloque donde guardamos la tabla de símbolos
+          let bloque = new CodeBloc();      // Bloque donde guardamos la tabla de símbolos
           let symbolTable = {};             // Tabla de símbolo del bloque actual
-          symbolTable.father = prevSymbolTable;
+          symbolTable.father = getPrev();  //???????????????corregir esto
           if (constant){
             symbolTable [constant[1].value] = new ConstDec({name: constant[1].value, value: constant [3]});
             if (constant[4]){
@@ -46,7 +50,7 @@ block
               } );
             }
           }
-          prevSymbolTable = symbolTable;
+          setPrev(symbolTable);
           funct.forEach ( function (element){
             var parametros = {};
             if (element [3]){
@@ -55,15 +59,18 @@ block
                 parametros [x[1].value]= null;
               });
             }
-            symbolTable [element[1].value] = new FunctionDec({
+            let declaration = new FunctionDec({
               name: element[1].value,
               params: parametros,
               code: element[6] // hacer aqui un new CodeBloc();
             });
+            declaration.code.symbolTable.father = symbolTable;
+            symbolTable [element[1].value] = declaration
           });
-          prevSymbolTable = symbolTable.father;
-          bloque.symbolTable = symbolTable;
 
+          setPrev(symbolTable.father);
+
+          bloque.symbolTable = symbolTable;
           bloque.code = est;
 
           return bloque;

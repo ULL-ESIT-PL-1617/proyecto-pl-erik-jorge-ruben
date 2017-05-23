@@ -74,7 +74,7 @@ class CodeBloc extends Node {
   translate(){
     var retVar = "";
     for (var key in this.symbolTable){
-      if (this.symbolTable[key]){
+      if (this.symbolTable[key] && key != "father"){
         retVar += this.symbolTable[key].translate();
       }
     }
