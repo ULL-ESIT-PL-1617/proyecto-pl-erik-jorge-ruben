@@ -4,8 +4,14 @@ const util = require("util");
  *  Clase que construye un nodo.
  */
 class Node {
-  constructor(node) {
+  constructor(node, symbols) {
     Object.assign(this,node);
+    //if (symbols && this.code.symbolTable){
+    //  var temp = {};
+    //  Object.assign(temp, symbols);
+    //  Object.assign(temp, this.code.symbolTable);
+    //  this.code.allSymbols = temp;
+    //}
   }
 };
 
@@ -71,6 +77,7 @@ class FunctionCall extends Node{
  * Clase que traduce un bloque de código en PL0 a un bloque de código en JavaScript.
  */
 class CodeBloc extends Node {
+
   translate(){
     var retVar = "";
     for (var key in this.symbolTable){

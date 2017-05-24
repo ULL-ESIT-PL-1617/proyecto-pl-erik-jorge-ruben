@@ -32,7 +32,7 @@ block
         {
           let bloque = new CodeBloc();      // Bloque donde guardamos la tabla de símbolos
           let symbolTable = {};             // Tabla de símbolo del bloque actual
-          symbolTable.father = getPrev();  //???????????????corregir esto
+          //symbolTable.father = getPrev();  //???????????????corregir esto
           if (constant){
             symbolTable [constant[1].value] = new ConstDec({name: constant[1].value, value: constant [3]});
             if (constant[4]){
@@ -63,12 +63,12 @@ block
               name: element[1].value,
               params: parametros,
               code: element[6] // hacer aqui un new CodeBloc();
-            });
-            declaration.code.symbolTable.father = symbolTable;
+            }, symbolTable);
+            //declaration.code.symbolTable.father = symbolTable;
             symbolTable [element[1].value] = declaration
           });
 
-          setPrev(symbolTable.father);
+          //setPrev(symbolTable.father);
 
           bloque.symbolTable = symbolTable;
           bloque.code = est;
