@@ -1,4 +1,5 @@
 var beautify = require('js-beautify').js_beautify;
+var fs = require('fs');
 
 let prefixTemplate = function() {
   return `
@@ -23,10 +24,12 @@ let suffixTemplate  = function() {
 }; // end suffix
 
 module.exports = function(tree) {
-
-   var prefix = prefixTemplate();
-   var suffix = suffixTemplate();
-   /* traverse the tree producing translation */
-   let js = prefix+tree.translate()+suffix;
-   return beautify(js, { indent_size: 2 });
+   
+    
+    var prefix = prefixTemplate();
+    var suffix = suffixTemplate();
+    /* traverse the tree producing translation */
+    let js = prefix+tree.translate()+suffix;
+    fs.writeFileSync('output.js', beautify(js, { indent_size: 2 }));
+    return beautify(js, { indent_size: 2 });
 };
