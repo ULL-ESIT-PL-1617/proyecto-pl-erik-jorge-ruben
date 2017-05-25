@@ -1,5 +1,5 @@
 var chai = require('chai');
-var PEG = require('./arithmetics.js');
+var PEG = require('../js/arithmetics.js');
 var expect = chai.expect;
 var blanket = require("blanket")({
    /* options are passed as an argument object to the require statement */

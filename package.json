@@ -4,7 +4,7 @@
   "description": "## Alumnos",
   "main": "main.js",
   "scripts": {
-    "test": "mocha ./test.js",
+    "test": "mocha ./test/test.js",
     "coverage": "multi='dot=- html-cov=coverage.html' ./node_modules/mocha/bin/mocha -r blanket --reporter mocha-multi --no-colors"
   },
   "config": {
@@ -31,6 +31,7 @@
   "homepage": "https://github.com/ULL-ESIT-PL-1617/analizador-usando-peg-erik-jorge-ruben#readme",
   "devDependencies": {
     "blanket": "^1.2.3",
+    "chai": "^3.5.0",
     "mocha": "^3.3.0",
     "mocha-multi": "^0.11.0"
   },
