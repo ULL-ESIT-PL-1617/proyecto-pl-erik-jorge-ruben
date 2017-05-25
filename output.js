@@ -1,13 +1,11 @@
 module.exports = () => {
-  let e;
-  let sym = {};
   try {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    var d;
-    d = 2 + 2;
-    return sym;
+    var a;
+    var b;
+    while (a <= 10) {
+      a = a + 2;
+      b = b + 2;
+    };
   } catch (e) {
     let err = e.message.replace(/sym\.(\w+)/g, '$1');
     console.log(err);

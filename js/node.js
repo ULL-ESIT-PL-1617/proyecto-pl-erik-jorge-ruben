@@ -33,6 +33,12 @@ class ConstDec extends Node {
   }
 }
 
+class ParamDec extends Node {
+  translate(){
+    return this.name
+  }
+}
+
 /**
  * Clase que traduce una función PL0 a JavaScript.
  */
@@ -42,9 +48,9 @@ class FunctionDec extends Node{
     var counter = 1;
     for ( var par in this.params){
       if (counter == 1){
-        params += par;
+        params += this.params[par].translate();
       } else {
-        params += "," + par;
+        params += "," + this.params[par].translate();
       }
       counter++;
     }
@@ -97,7 +103,7 @@ class StatementBloc extends Node {
   translate(){
     var retVar = "";
     for (var key in this){
-      retVar += this[key].translate()
+      retVar += this[key].translate() + ";\n"
     }
     return retVar;
   }
@@ -136,11 +142,6 @@ class ComparissonOp extends Node {
   }
 }
 
-class Comma extends Node{
-  translate() {
-    return this.left.translate() + ",\n  " + this.right.translate();
-  }
-};
 
 class Leaf extends Node{
   translate() {
@@ -167,7 +168,6 @@ class ParExp extends Node{
 module.exports = {
   Node: Node,
   BinOp: BinOp,
-  Comma: Comma,
   Leaf: Leaf,
   FunctionDec: FunctionDec,
   FunctionCall: FunctionCall,
@@ -179,5 +179,6 @@ module.exports = {
   ComparissonOp: ComparissonOp,
   VarDec: VarDec,
   ConstDec: ConstDec,
+  ParamDec: ParamDec,
   ReturnStatement: ReturnStatement
 };

@@ -1,5 +1,5 @@
 {
-  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec, ReturnStatement} = require('./node.js');
+  var { Node, BinOp, Comma, Leaf, FunctionDec, CodeBloc, IfStatement, WhileStatement, ParExp, FunctionCall, StatementBloc, ComparissonOp, VarDec, ConstDec, ReturnStatement, ParamDec} = require('./node.js');
   let prevSymbolTable = null;
   var setPrev = function (symbol) {
     prevSymbolTable = symbol;
@@ -54,9 +54,9 @@ block
           funct.forEach ( function (element){
             var parametros = {};
             if (element [3]){
-              parametros [element [3] [0].value] = null;
+              parametros [element [3] [0].value] =  new ParamDec({name: element [3] [0].value, value: null });
               element [3][1].forEach (function (x){
-                parametros [x[1].value]= null;
+                parametros [x[1].value]= new ParamDec({name: x[1].value, value: null });
               });
             }
             let declaration = new FunctionDec({
