@@ -1,5 +1,6 @@
 var chai = require('chai');
 var PEG = require('../js/arithmetics.js');
+var util = require('util');
 var expect = chai.expect;
 var blanket = require("blanket")({
    /* options are passed as an argument object to the require statement */
@@ -11,12 +12,12 @@ function removeSpaces(str){
 }
 
 describe("<---Test para comprobar que se cumple la salida esperada--->", function () {
-  it("# a := 2 + 2", function(){
+  it("# var a; a := 2 + 2", function(){
     var tree = `
-                {"constantes":{},"variables":{},"procedimientos":{},"funciones":{},"sentencias":{"type":":=","left":"a","right":{"type":"+","left":2,"right":2}}}
+                CodeBloc{symbolTable:{a:VarDec{name:'a',value:null}},code:BinOp{type:'=',left:Leaf{type:'ID',value:'a'},right:BinOp{type:'+',left:Leaf{type:'NUM',value:'2'},right:Leaf{type:'NUM',value:'2'}}}}
                 `;
     tree = removeSpaces(tree);
-    var res = removeSpaces(JSON.stringify(PEG.parse('a := 2 + 2'), null, 2))
+    console.log(util.inspect(PEG.parse('var a; a := 2 + 2')))
     expect(res).to.equal(tree);
   });
   

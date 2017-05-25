@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 var util = require('util');
 var fs = require('fs');
-var PEG = require("../js/arithmetics.js");
-var genCode = require("../js/gen-code.js");
-var ambito = require ("../js/analisis-ambito.js");
+var PEG = require("./js/arithmetics.js");
+var genCode = require("./js/gen-code.js");
+var ambito = require ("./js/analisis-ambito.js");
 
 var fileName = process.argv[2] || './inputs/input1.pl';
 
