@@ -3,6 +3,7 @@ function funcId (a, b, c) {
     var f, g, h;  
     begin
         f := a + d;
-        g := b + e  
+        g := b + e
     end
-}
+};
+a := funcId(2, b, 2 + 2)
