@@ -21,6 +21,11 @@ module.exports = function ambito (raiz, oldSymbols){
       //console.log("Entro por " + key);
       ambito (raiz[key], sym);
     }
+    if (raiz[key].constructor.name=="FunctionCall"){
+      if (Object.keys(raiz[key].parametros).length != Object.keys(sym[raiz[key].id.value].params).length) {
+        throw "Número de paramtros incorrectos en la llamada a la función: " + raiz[key].id.value ;
+      }
+    }
 
   }
 };
